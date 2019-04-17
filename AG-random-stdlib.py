@@ -6,16 +6,14 @@ QUANTIDADE_CROMOSOMOS_INDIVIDUO = 17
 QUANTIDADE_POPULACAO = 1000
 TAXA_MUTACAO = 50 / 100
 
-BYTES = range(256)
-
 def calcular_entropia(cadeia_bytes):
     entropia = 0
 
-    for byte in BYTES:
-        p_x = cadeia_bytes.count(byte) / len(cadeia_bytes)
+    for byte in range(256):
+        probabilidade = cadeia_bytes.count(byte) / len(cadeia_bytes)
 
-        if p_x > 0:
-            entropia += -p_x * log(p_x, 256)
+        if probabilidade > 0:
+            entropia += -probabilidade * log(probabilidade, 256)
 
     return entropia
 
