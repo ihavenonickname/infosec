@@ -13,7 +13,7 @@ def shannon_entropy(cadeia_bits):
 
     return entropia
 
-def gerar_chave():
+def gerar_chave(counter=1):
     # passos 1, 2, 3: gerar um array aleatório com letras de A-Z
     array_caracteres = [randint(65, 91) for _ in range(16)]
 
@@ -48,11 +48,13 @@ def gerar_chave():
     entropia = shannon_entropy(bits_finais)
 
     if entropia >= 0.95:
-        return bits_finais, entropia
+        return bits_finais, entropia, counter
 
-    return gerar_chave()
+    return gerar_chave(counter+1)
 
-chave, entropia = gerar_chave()
+chave, entropia, counter = gerar_chave()
 
 print('Chave:', chave)
+print('Tamanho da chave:', len(chave), 'bits')
 print('Entropia:', entropia)
+print('# de iterações para gerar a chave:', counter)
