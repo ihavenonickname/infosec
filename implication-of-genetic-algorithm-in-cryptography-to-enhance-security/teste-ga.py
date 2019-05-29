@@ -4,6 +4,8 @@ from math import log
 from time import sleep
 from collections import defaultdict
 
+import matplotlib.pyplot as plt
+
 def shannon_entropy(cadeia_bits):
     entropia = 0
 
@@ -15,7 +17,7 @@ def shannon_entropy(cadeia_bits):
 
 def gerar_chave_artigo(n_iteracoes=1):
     PRIMOS = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
-    
+
     # passos 1, 2, 3: gerar um array aleatório com letras de A-Z
     array_caracteres = [randint(65, 91) for _ in range(16)]
 
@@ -62,40 +64,40 @@ def gerar_chave_basico(n_iteracoes=1):
 
     return gerar_chave_basico(n_iteracoes+1)
 
-def print_ajuda():
-    print('2 Argumentos:')
-    print('artigo|basico')
-    print('# de iterações')
-    
-def main():
-    if len(argv) != 3:
-        print_ajuda()
-        return
-    
-    if argv[1] == 'artigo':
-        f = gerar_chave_artigo
-    elif argv[1] == 'basico':
-        f = gerar_chave_basico
-    else:
-        print_ajuda()
-        return
-    
-    try:
-        n = int(argv[2])
-    except ValueError:
-        print_ajuda()
-        return
-        
+def simular(f, cor, n, label):
     historico = defaultdict(int)
-    
+
     for i in range(n):
-        chave, entropia, n_iteracoes = f()
+        _, _, n_iteracoes = f()
         historico[n_iteracoes] += 1
-        
+
+    x = []
+    y = []
+
     for n_iteracoes, vezes in sorted(historico.items()):
-        porcentagem = vezes / n * 100
-        print(f'{n_iteracoes} iteracoes: {porcentagem:5.2f}%')
+        x.append(n_iteracoes)
+        y.append(vezes)
+
+    plt.plot(x, y, cor + '-', label=label)
+
+def main():
+    if len(argv) != 2:
+        print('Informe a quantidade de simulações')
+        return
+
+    n = int(argv[1])
+
+    simular(gerar_chave_artigo, 'r', n, 'Artigo')
+    simular(gerar_chave_basico, 'k', n, 'Básico')
+
+    plt.xlabel('# de iterações')
+    plt.ylabel('# de simulações')
+    plt.legend(loc='upper right')
+
+    plt.ylim(ymin=0, ymax=n)
+
+    plt.show()
 
 if __name__ == '__main__':
     main()
-    
+
