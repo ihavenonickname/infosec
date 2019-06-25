@@ -64,7 +64,7 @@ def gerar_chave_basico(n_iteracoes=1):
 
     return gerar_chave_basico(n_iteracoes+1)
 
-def simular(f, cor, n, label):
+def simular(f, n):
     historico = defaultdict(int)
 
     for i in range(n):
@@ -76,25 +76,33 @@ def simular(f, cor, n, label):
 
     for n_iteracoes, vezes in sorted(historico.items()):
         x.append(n_iteracoes)
-        y.append(vezes)
+        y.append(vezes / n * 100)
 
-    plt.plot(x, y, cor + '-', label=label)
+    return x, y
 
 def main():
-    if len(argv) != 2:
-        print('Informe a quantidade de simulações')
-        return
+    if len(argv) == 2:
+        n = int(argv[1])
+    else:
+        n = 1000
 
-    n = int(argv[1])
+    _, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
 
-    simular(gerar_chave_artigo, 'r', n, 'Artigo')
-    simular(gerar_chave_basico, 'k', n, 'Básico')
+    ax1.set_ylim(ymin=0, ymax=100)
+    ax2.set_ylim(ymin=0, ymax=100)
 
-    plt.xlabel('# de iterações')
-    plt.ylabel('# de simulações')
-    plt.legend(loc='upper right')
+    ax1.set_title('Algoritmo proposto')
+    x, y = simular(gerar_chave_artigo, n)
+    ax1.bar(x, y)
 
-    plt.ylim(ymin=0, ymax=n)
+    ax2.set_title('Algoritmo básico')
+    x, y = simular(gerar_chave_basico, n)
+    ax2.bar(x, y)
+
+    plt.xlabel('Iterações necessárias')
+    plt.ylabel('%% das ocorrências')
+
+    plt.tight_layout()
 
     plt.show()
 
