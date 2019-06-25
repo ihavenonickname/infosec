@@ -16,7 +16,14 @@ def shannon_entropy(cadeia_bits):
     return entropia
 
 def gerar_chave_artigo(n_iteracoes=1):
-    PRIMOS = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+    PRIMOS = [
+         2,  3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53,
+        59, 61, 67, 71,
+        83, 89, 97
+    ]
 
     # passos 1, 2, 3: gerar um array aleatório com letras de A-Z
     array_caracteres = [randint(65, 91) for _ in range(16)]
@@ -47,7 +54,8 @@ def gerar_chave_artigo(n_iteracoes=1):
         ultimo_bit = '1' if populacao[i][7] == '0' else '0'
         bits_finais += primeiro_bit + populacao[i][1:7] + ultimo_bit
 
-    # passos 13, 14, 15: refazer o processo até encontrar uma cadeia de bits com entropia >=95%
+    # passos 13, 14, 15: refazer o processo até encontrar uma cadeia de bits
+    # com entropia >= 95%
     entropia = shannon_entropy(bits_finais)
 
     if entropia >= 0.95:
